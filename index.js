@@ -18,11 +18,38 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-app.get("/api/:datetime", function (req, res) {
+app.get("/api", function (req, res) {
   res.status(200).json({
-    "unix": new Date(req.params.datetime).getTime(),
-    "utc": new Date(req.params.datetime).toString()
+    "unix": new Date().getTime(),
+    "utc": new Date().toGMTString()
   });
+});
+
+app.get("/api/:dateTime", function (req, res) {
+  try {
+    let dateMsRegex = new RegExp(/^[0-9]+$/);
+  
+    let dateTime = (
+      (dateMsRegex.test(req.params.dateTime)) ? 
+      eval(req.params.dateTime) : req.params.dateTime
+    );
+
+    if (new Date(dateTime).toGMTString() === "Invalid Date") {
+    res.status(400).json({
+      error: "Invalid Date"
+    });    
+    }
+    
+    res.status(200).json({
+      "unix": new Date(dateTime).getTime(),
+      "utc": new Date(dateTime).toGMTString()
+    });
+      
+  } catch(error) {
+    res.status(400).json({
+      "error": "Invalid Date"
+    });
+  }
 });
 
 // listen for requests :)
