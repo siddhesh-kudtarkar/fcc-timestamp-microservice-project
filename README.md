@@ -1,3 +1,3 @@
 # Timestamp Micro-service
 
-Timestamp Micro-service project for FCC Back-end Certification.
+Gives time-stamp or number of miiliseconds for a particular date.
